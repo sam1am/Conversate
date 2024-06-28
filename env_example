@@ -1,0 +1,28 @@
+STT_MODEL=tiny
+STT_DEVICE=cuda #One of: cuda, cpu, rocm
+STT_COMPUTE_TYPE=float16 #float16 for cuda or int8 for cpu
+
+LLM_MODEL=QuantFactory/Meta-Llama-3-8B-Instruct-GGUF
+LLM_API_URL=http://localhost:11323/v1
+LLM_API_KEY=lm-studio
+LLM_TEMP=1
+
+MESSAGE_HISTORY=1000
+
+GROQ_MODEL=llama3-70b-8192
+# GROQ_MODEL=mixtral-8x7b-32768
+GROQ_API_KEY=
+
+ANTHROPIC_MODEL=claude-3-opus-20240229
+ANTHROPIC_API_KEY=
+
+TTS_API_URL=http://localhost:7860/
+TTS_VOICE=max1 #brimley1, max1, hive, nuked, toaster
+TTS_LANG=English
+TTS_SPEED=0.75 #1 for normal. Go down for faster. 
+
+SOUND_DEVICE=22
+SAMPLE_RATE=44100
+
+# Internal API
+API_PASSWORD=itnotsecretitssacred

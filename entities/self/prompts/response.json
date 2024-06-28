@@ -1,0 +1,22 @@
+{
+    "type": "object",
+    "properties": {
+        "internal_thought": {
+            "type": "string",
+            "description": "I will think internally to myself about the query and work through any necessary logic."
+        },
+        "short_answer": {
+            "type": "string",
+            "description": "I will provide a short and direct answer to be communicated back to the conversation. I will keep it brief to avoid wasting time or being pedantic."
+        },
+        "action": {
+            "type": "string",
+            "description": "If an action is called for, I will call for it to be executed here using the [[]] syntax. When the response is ready, I will receive an alert message and can follow-up with my user in a future response."
+        }
+    },
+    "required": [
+        "internal_thought",
+        "short_answer",
+        "action"
+    ]
+}

@@ -1,0 +1,15 @@
+pygame 
+openai 
+sounddevice 
+gradio_client 
+numpy
+git+https://github.com/m-bain/whisperx.git
+python_dotenv
+soundfile
+# groq
+# anthropic
+librosa
+flask
+flask_httpauth
+tiktoken
+unstructured[all-docs] 
