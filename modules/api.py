@@ -1,8 +1,10 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, Response
 from flask_httpauth import HTTPBasicAuth
+from flask_sse import sse
 from .llm_api import process_query
 from .database import log_interaction, get_last_messages
 from .stt_api import convert_audio_to_text
+from .tts_api import convert_to_speech
 import os
 import re
 import json
@@ -11,8 +13,12 @@ import io
 import wave
 import numpy as np
 
+
 app = Flask(__name__)
+app.config["REDIS_URL"] = "redis://localhost:6379"
+app.register_blueprint(sse, url_prefix='/stream')
 auth = HTTPBasicAuth()
+
 
 API_PASSWORD = 'lookatmeimanapikey'
 
@@ -61,7 +67,21 @@ def query_api():
     query_uuid = str(uuid.uuid4())
     log_interaction(query_uuid, "", query_text, response_text, "")
 
-    return jsonify({'short_answer': short_answer})
+    # Start TTS conversion in a separate thread
+    tts_thread = threading.Thread(target=generate_and_stream_tts, args=(short_answer, query_uuid))
+    tts_thread.start()
+
+    return jsonify({'short_answer': short_answer, 'stream_url': f'/stream?channel={query_uuid}'})
+
+def generate_and_stream_tts(text, query_uuid):
+    def tts_callback(audio_data, sample_rate):
+        audio_bytes = io.BytesIO()
+        sf.write(audio_bytes, audio_data, sample_rate, format='wav')
+        audio_bytes.seek(0)
+        sse.publish({"audio": audio_bytes.getvalue().decode('latin1')}, type='audio', channel=query_uuid)
+
+    convert_to_speech(text, query_uuid, tts_callback)
+    sse.publish({"message": "TTS_COMPLETE"}, type='complete', channel=query_uuid)
 
 def process_audio(audio_file):
     # Save the uploaded PCM file temporarily
