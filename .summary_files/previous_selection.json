@@ -1,0 +1,1 @@
+["./modules/conversate_app.py", "./modules/stt_api.py", "./modules/llm_api.py", "./modules/database.py", "./modules/tts_api.py", "./main.py", "./modules/api.py"]
